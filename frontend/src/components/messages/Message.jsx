@@ -1,16 +1,28 @@
+import { useAuthContext } from "../../context/AuthContext"
+import useConversation from "../../zustand/useConversation";
+import { extractTime } from "../../utils/extractTime";
 
 
-const Message = () => {
+const Message = ({message}) => {
+  const {authUser} = useAuthContext();
+  const {selectedConversation} = useConversation();
+  const fromMe = message.senderId === authUser._id;
+  const chatClassName = fromMe ? 'chat-end' : 'chat-start';
+  const profilePic = fromMe ? authUser.profilePic: selectedConversation?.profilePic;
+  const bubbleBgColor = fromMe? 'bg-purple-950' : "";
+  const formattedTime = extractTime(message.createdAt);
+  const shakeClass = message.shouldShake ? "shake" : "";
+
   return (
-    <div className="chat chat-end">
+    <div className={`chat ${chatClassName}`}>
         <div className="chat-image avatar">
             <div className="w-10 rounded-full">
-                <img alt="tailwind chat" src={"https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1214428300?k=6&m=1214428300&s=170667a&w=0&h=hMQs-822xLWFz66z3Xfd8vPog333rNFHU6Q_kc9Sues="}/>
+                <img alt="tailwind chat" src={profilePic}/>
             </div>
         </div>
-      <div className={"chat-bubble text-white bg-blue-500"}>Hi! Chat Test.
+      <div className={`chat-bubble text-white ${bubbleBgColor} ${shakeClass} pb-2`}>{message.message}
       </div>
-      <div className="chat-footer opacity-50 text-xs flex gap-1 items-center">12:42</div>
+      <div className="chat-footer opacity-50 text-xs flex gap-1 items-center">{formattedTime}</div>
     </div>
   )
 }

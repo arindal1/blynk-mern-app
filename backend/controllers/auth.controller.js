@@ -1,5 +1,4 @@
 import bcrypt from "bcryptjs";
-
 import User from "../models/user.model.js";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
 
@@ -17,7 +16,6 @@ export const signup = async (req, res) => {
             return res.status(400).json({ error: "Username already exists" });
         }
 
-        // PASSWORD HASH HERE
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -33,7 +31,6 @@ export const signup = async (req, res) => {
         });
 
         if (newUser) {
-            // Generate JWT token
             generateTokenAndSetCookie(newUser._id, res);
             await newUser.save();
 
