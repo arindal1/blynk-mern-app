@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "blynkapp": "file:..",
+    "chatapp": "file:.."
+  }
+}
